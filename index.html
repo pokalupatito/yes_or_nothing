@@ -25,14 +25,21 @@
       border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
       text-align: center;
-      max-width: 400px;
+      max-width: 420px;
       width: 90%;
     }
 
     h1 {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-size: 1.8rem;
       color: #e11d48;
+    }
+
+    .photo {
+      width: 100%;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      display: none;
     }
 
     .buttons {
@@ -48,7 +55,7 @@
       padding: 15px 30px;
       font-size: 1rem;
       cursor: pointer;
-      transition: transform 0.2s ease, font-size 0.2s ease, padding 0.2s ease;
+      transition: transform 0.2s ease;
     }
 
     #yesBtn {
@@ -63,37 +70,82 @@
 
     .thank-you {
       display: none;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       color: #16a34a;
     }
 
-    .hearts {
-      font-size: 2rem;
-      margin-top: 15px;
+    .password-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    iframe {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1 id="question">Will you be my Valentine? 💘</h1>
 
-    <div class="buttons" id="buttons">
-      <button id="yesBtn">Yes 💕</button>
-      <button id="noBtn">No 🙈</button>
+    <!-- PASSWORD SCREEN -->
+    <div id="passwordScreen" class="password-screen">
+      <h1>Enter the secret 💌</h1>
+      <input type="password" id="passwordInput" placeholder="Password" />
+      <button onclick="checkPassword()">Unlock 💖</button>
     </div>
 
-    <div class="thank-you" id="thankYou">
-      <p>Yay! Thank you for being my Valentine 💖</p>
-      <div class="hearts">💞💞💞</div>
+    <!-- MAIN CONTENT -->
+    <div id="mainContent" style="display:none;">
+      <img src="photo_1.jpg" alt="Us" class="photo" id="photo" />
+
+      <h1 id="question">Will you be my Valentine? 💘</h1>
+
+      <div class="buttons" id="buttons">
+        <button id="yesBtn">Yes 💕</button>
+        <button id="noBtn">No 🙈</button>
+      </div>
+
+      <div class="thank-you" id="thankYou">
+        <p>Yay! Thank you for being my Valentine 💖</p>
+        <p>Now play the song 🎶</p>
+      </div>
     </div>
+
+    <!-- YOUTUBE AUDIO -->
+    <iframe id="ytPlayer" width="0" height="0" 
+      src="https://www.youtube.com/watch?v=_trU-Wt9ucI&list=RD_trU-Wt9ucI&start_radio=1" 
+      allow="autoplay"></iframe>
+
   </div>
 
   <script>
+    const CORRECT_PASSWORD = "love"; // CHANGE THIS
+
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value;
+      if (input === CORRECT_PASSWORD) {
+        document.getElementById('passwordScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        document.getElementById('photo').style.display = 'block';
+      } else {
+        alert('Wrong password 😛');
+      }
+    }
+
     const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
     const thankYou = document.getElementById('thankYou');
     const buttons = document.getElementById('buttons');
     const question = document.getElementById('question');
+    const ytPlayer = document.getElementById('ytPlayer');
 
     let yesScale = 1;
     let noScale = 1;
@@ -101,7 +153,6 @@
     noBtn.addEventListener('click', () => {
       yesScale += 0.15;
       noScale = Math.max(0.4, noScale - 0.1);
-
       yesBtn.style.transform = `scale(${yesScale})`;
       noBtn.style.transform = `scale(${noScale})`;
     });
@@ -110,6 +161,7 @@
       question.style.display = 'none';
       buttons.style.display = 'none';
       thankYou.style.display = 'block';
+      ytPlayer.style.display = 'block';
     });
   </script>
 </body>
